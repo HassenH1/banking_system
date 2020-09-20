@@ -13,7 +13,6 @@ class Person {
   public:
     //constructor overload
     Person(){
-      std::cout << "Constuctor with no Args" << std::endl;
     }
     Person(std::string n, int acc_num, double bal = 0)
     : name(n), account_number(acc_num), balance(bal)
@@ -23,15 +22,15 @@ class Person {
     //copy Constructor
     // example Point(const Point &p2) {x = p2.x; y = p2.y; } 
     //TODO, implement copy constructor
+    //DEEP COPY?
     Person(const Person &source)
-    : name{source.name}, account_number{source.acc_num}, balance{source.bal}
+    : name{source.name}, account_number{source.account_number}, balance{source.balance}
     {
-
+      std::cout << "CC called<---------------------" << source.name << std::endl;
     }
 
     //Destructor
     ~Person(){
-      std::cout << "++++DESTRUCTOR IS CALLED FOR: " << name << std::endl;
     }
 
     //getters
@@ -45,16 +44,9 @@ class Person {
       return balance;
     }
 
-    //setters
-    // std::string set_name(){
-      
-    // }
-    // int set_acc_num(){
-      
-    // }
     void set_bal(double dep){
       balance += dep;
-      std::cout << "==============Deposit was successful=================" << std::endl;
+      std::cout << balance << "==============Deposit was successful=================" << std::endl;
     }
 
     void print(){
@@ -63,21 +55,8 @@ class Person {
       std::cout << "name: " << name << std::endl;
       std::cout << "Balance: " <<  balance << std::endl;
     }
-};
 
-class Account {
-  private:
-    std::vector<Person> list_acc;
-  public: 
-    //create new Account and Using the person class to create new person
-    void new_account(int acc_num, std::string n, double dep = 0){
-      Person p(n, acc_num, dep);
-      list_acc.push_back(p);
-      std::cout << "==========Account was Created Successfully==========" << std::endl;
-      p.print();
-    }
-    
-    //deposit money into account
+        //deposit money into account
     double deposit(){
       std::cout << std::endl;
       std::cout << "==========Deposit==========" << std::endl;
@@ -85,6 +64,20 @@ class Account {
       double dep{};
       std::cin >> dep;
       return dep;
+    }
+};
+
+class Account {
+  private:
+    std::vector<Person> list_acc;
+    // Person p;
+  public: 
+    //create new Account and Using the person class to create new person
+    void new_account(int acc_num, std::string n, double dep = 0){
+      Person p(n, acc_num, dep);
+      list_acc.push_back(p);
+      std::cout << "==========Account was Created Successfully==========" << std::endl;
+      p.print();
     }
 
     //print all accounts 
@@ -98,13 +91,14 @@ class Account {
       }
     }
 
+    //this is not working right
     Person find_acc(int id){
-      Person *p;
+      Person p;
       for(auto i : list_acc){
         if(id == i.get_acc_num()){
           std::cout << i.get_name() << std::endl;
           std::cout << i.get_bal() << std::endl;
-          p = &i;
+          p = i;
         }
       }
       return p;
@@ -115,7 +109,7 @@ class Account {
 class Menu {
   public:
     Account a;
-    
+    Person p;
     //the menu
     void menu(){
       std::cout << std::endl;
@@ -144,7 +138,7 @@ class Menu {
           double deposit_amount{};
           std::cin >> input;
           if(input == 'y' || input == 'Y'){
-            deposit_amount = a.deposit();
+            deposit_amount = p.deposit();
           }
           a.new_account(account_number, name, deposit_amount);
           std::cout << "================================================" << std::endl;
@@ -159,14 +153,15 @@ class Menu {
         }
         case '3': {
           std::cout << std::endl;
-          std::cout << "=============Deposit into Account===========" << std::endl;
+          std::cout << "==============Deposit into Account=============" << std::endl;
           std::cout << "Enter your Account ID: ";
           int input{};
           std::cin >> input;
           Person p = a.find_acc(input);
           double new_amount{};
-          new_amount = a.deposit();
+          new_amount = p.deposit();
           p.set_bal(new_amount);
+          break;
         }
         default: {
           if(input == 'e'){
