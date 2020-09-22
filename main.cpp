@@ -23,11 +23,11 @@ class Person {
     // example Point(const Point &p2) {x = p2.x; y = p2.y; } 
     //TODO, implement copy constructor
     //DEEP COPY?
-    Person(const Person &source)
-    : name{source.name}, account_number{source.account_number}, balance{source.balance}
-    {
-      std::cout << "CC called<---------------------" << source.name << std::endl;
-    }
+    //Person(const Person &source)
+    //: name{source.name}, account_number{source.account_number}, balance{source.balance}
+    //{
+    //  std::cout << "CC called<---------------------" << source.name << std::endl;
+    //}
 
     //Destructor
     ~Person(){
@@ -67,10 +67,12 @@ class Person {
     }
 };
 
+Person null_person;
+
 class Account {
   private:
     std::vector<Person> list_acc;
-    // Person p;
+    //Person p;
   public: 
     //create new Account and Using the person class to create new person
     void new_account(int acc_num, std::string n, double dep = 0){
@@ -92,18 +94,16 @@ class Account {
     }
 
     //this is not working right
-    Person find_acc(int id){
-      Person p;
-      for(auto i : list_acc){
+    Person& find_acc(int id){
+      for(Person& i : list_acc){
         if(id == i.get_acc_num()){
           std::cout << i.get_name() << std::endl;
           std::cout << i.get_bal() << std::endl;
-          p = i;
+	  return i;
         }
       }
-      return p;
+     return null_person; //problem here,
     }
-
 };
 
 class Menu {
@@ -157,12 +157,17 @@ class Menu {
           std::cout << "Enter your Account ID: ";
           int input{};
           std::cin >> input;
-          Person p = a.find_acc(input);
-          double new_amount{};
-          new_amount = p.deposit();
-          p.set_bal(new_amount);
-          break;
-        }
+          Person &p = a.find_acc(input);
+	  if(p.get_acc_num() == 0){
+ 	    std::cout << "Account does not exists" << std::endl;
+	    break; 
+	  } else {
+	    double new_amount{};
+            new_amount = p.deposit();
+            p.set_bal(new_amount);
+            break;
+	  }
+                  }
         default: {
           if(input == 'e'){
             std::cout << "Goodbye" << std::endl;
@@ -178,7 +183,8 @@ class Menu {
 int main() {
   Menu m;
   char input{};
-
+  srand(time(NULL));
+  
   do{
     m.menu();
     m.menu_choice(input);
