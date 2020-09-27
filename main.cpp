@@ -37,11 +37,13 @@ class Person {
 								void set_bal(double amount, std::string d_w){
 												if(d_w == "deposit"){
 																balance += amount;
-																std::cout << "==============Deposit was successful=================" << std::endl;
+																std::cout << "==============Deposit was successful=================" << std::endl;	
+																std::cout << "Account balance is " << get_bal() << std::endl;
 																std::cout << std::endl;
 												} else if(d_w == "withdrawal"){
 																balance -= amount;
 																std::cout << "==============Withdrawal was successful=================" << std::endl;
+																std::cout << "Account balance is " << get_bal() << std::endl;
 																std::cout << std::endl;
 												}
 								}
@@ -146,10 +148,17 @@ class Menu {
 																									std::string name;
 																									std::cin.ignore();
 																									std::getline(std::cin, name);
-																									int account_number = rand() % 100 + 1; //gets random number for account 
-																									std::cout << "Would you like to deposit?(Y/N) ";
-																									char input{};
+																									int account_number = rand() % 100 + 1; //gets random number for account
+																									/*
+																									std::cout << "Checking or Savings?(C/S)?";
+																									if(input == 's' || input == 'S'){
+																										p.savings_acc();
+																									} else if(input == 'c' || input == 'C'){
+																										p.checkings_acc()
+																									}*/
+																									std::cout << "Would you like to deposit?(Y/N) ";																								
 																									double deposit_amount{};
+																									char input{};
 																									std::cin >> input;
 																									if(input == 'y' || input == 'Y'){
 																													deposit_amount = p.deposit();
@@ -215,9 +224,6 @@ int main() {
 				Menu m;
 				char input{};
 				srand(time(NULL));
-
-
-
 				do{
 								m.menu();
 								m.menu_choice(input);
